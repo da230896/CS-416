@@ -1,0 +1,146 @@
+:root {
+    --base-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    --theme-background: #0D0D0D;
+    --theme-color-text: #FFFF;
+    --theme-color-h1: #b39374;
+    --theme-color-h2: #edc297;
+    --theme-color-h3: #ffd9b3;
+    
+    --annotation-rect-fill: #DBDBDB;
+    --annotation-circle-fill: rgba(255, 255, 255, 0.796);
+    --annotation-tentacle-fill: #E19E9E;
+
+    --slider-fill: #7897BF;
+}
+
+body {
+    font: var(--base-font-family);
+}
+
+.slideswrapper {
+    width: 100vw;
+    height: 100vh;
+}
+
+.slide {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    padding: 3rem;
+    background-color: var(--theme-background);
+}
+
+.slide_top_down{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    padding: 3rem;
+    background-color: var(--theme-background);
+}
+
+.slide__bottom_pane {
+    flex-grow: 2;
+}
+
+.slide__partition {
+    width: 7.5rem;
+}
+
+.slide__right_pane{
+    width: 50%
+}
+
+.slide__h1{
+    color: var(--theme-color-h1);
+    font-size: 2.4rem;
+    font-weight: bold; 
+}
+
+.slide__h2{
+    color: var(--theme-color-h2);
+    font-size: 1.4rem;
+    font-weight: bold; 
+}
+
+.slide__h3{
+    color: var(--theme-color-h3);
+    font-size: 1rem;
+    font-weight: bold; 
+}
+
+.slide__text{
+    color: var(--theme-color-text);
+}
+
+
+.plot {
+    width: 100%;
+    height: 100%;
+}
+
+.plot_side_by_side{
+    width: 80%;
+    height: 100%;
+}
+
+.slide_order_container {
+    width: 100%;
+    height: 8%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.slide_order_container ol{
+    padding-left: 0rem;
+}
+
+.slide_order_container li{
+    display: inline;
+    padding: 3rem 1rem 1rem 1rem;
+}
+
+.slide_order_container .active_slide_number{
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.x_axis_label{
+    font-size: 2rem;
+}
+
+.y_axis_label{
+    font-size: 2rem;
+}
+
+.grid_line {
+    stroke: lightgray; /* Set the grid line color */
+    stroke-dasharray: 3 3; /* Add dashes to the grid lines */
+}
+
+.annotation-line{
+    stroke: var(--annotation-tentacle-fill);
+    stroke-width: 0.32rem;
+}
+
+.annotation-circle{
+    fill: var(--annotation-circle-fill);
+    stroke-width: 0rem;
+}
+
+.annotation-rect {
+    fill: var(--annotation-rect-fill);
+}
+
+.annotation-text{
+    position: relative;
+    z-index: 10;
+    stroke: none;
+    fill: #fff;
+    font-size: 1.5rem;
+}

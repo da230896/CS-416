@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <link rel="stylesheet" href="slides.css">
+    <link rel="stylesheet" href="slider.css">
+
+    <!-- bootstrap js -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <title>[CS-416] Narrative Visualization</title>
+</head>
+
+<body>
+    <div id="slides_container" class="slideswrapper">
+        <div class="slide_top_down" id="slide-7">
+            <div class="slide__top_pane">
+                <div class="slide__text">
+                    <div class="slide__h2">
+                        Free form user exploration
+                        <br />
+                    </div>
+                    <div class="slide__h3">
+                        User can interact with timeline filter to see curves at different interval of time and learn
+                        their own lesson.
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+            <div class="slide__bottom_pane">
+                <svg id="plot1" class="plot1"></svg>
+                <svg id="plot2" class="plot2"></svg>
+                <div class="wrap" style="--a:0; --b:100">
+                    <div id="multi-lbl" class="slider-title">Timeline filter(slide blue knobs to filter, area between
+                        knobs
+                        represents %age selection):</div>
+                    <input id="a" type="range" min="0" value="0" max="100" />
+                    <input id="b" type="range" min="0" value="100" max="100" />
+                </div>
+            </div>
+        </div>
+        <div class="slide_order_container">
+            <ol>
+                <li><a href="slide2.html"> 1 </a></li>
+                <li><a href="slide2.html"> 2 </a></li>
+                <li><a href="slide3.html"> 3 </a></li>
+                <li><a href="slide4.html"> 4 </a></li>
+                <li><a href="slide5.html"> 5 </a></li>
+                <li><a href="slide6.html"> 6 </a></li>
+                <li class="active_slide_number"><a href="slide7.html"> 7 </a></li>
+            </ol>
+        </div>
+    </div>
+</body>
+
+<script src="js/slider.js"></script>
+<script src="js/deaths_data.js"></script>
+<script src="js/cases_data.js"></script>
+<script src="js/line_chart_dual_axis.js"></script>
+<!-- <script src="js/annotate.js"></script> -->
+<script>
+    const dateParse = d3.timeParse("%Y-%m-%d");
+    const orig_deaths_data_for_plot = deaths_data.map((obj, index) => {
+        return {
+            y1: obj.deaths / (1_000_000),
+            y2: cases_data[index].cases / (1_000_000),
+            x: dateParse(obj.date)
+        }
+    });
+    var working_deaths_data_for_plot = [];
+
+    const orig_fatality_data = deaths_data.map((obj, index) => {
+        const cases = cases_data[index].cases;
+        let fatality_rate = 0;
+        if (cases != 0) {
+            fatality_rate = obj.deaths / cases;
+        }
+        return {
+            y1: 100 * fatality_rate,
+            y2: cases / (1_000_000),
+            x: dateParse(obj.date)
+        }
+    });
+    var working_fatality_data = [];
+    set_deaths_data_array();
+
+    function draw_or_refresh() {
+        chartObj = drawDualAxisLineChart({
+            xAxis: "Time",
+            y1Axis: "Deaths (in million)",
+            y2Axis: "Cases (in million)"
+        }, working_deaths_data_for_plot, "#plot2", 800, 650);
+        chartObj.render();
+        lastIndex = working_deaths_data_for_plot.length - 1;
+
+        // annotation_data = [
+        //     {
+        //         "x1": working_deaths_data_for_plot[0].x,
+        //         "y1": working_deaths_data_for_plot[0].y1,
+        //         "x2": working_deaths_data_for_plot[0].x,
+        //         "y2": working_deaths_data_for_plot[0].y1,
+        //         label: `Deaths: ${(working_deaths_data_for_plot[0].y1).toFixed(2)}(Millions)`,
+        //         y1axis: true
+        //     },
+        //     {
+        //         "x1": working_deaths_data_for_plot[lastIndex].x,
+        //         "y1": working_deaths_data_for_plot[lastIndex].y1,
+        //         "x2": working_deaths_data_for_plot[lastIndex-5].x,
+        //         "y2": working_deaths_data_for_plot[lastIndex-5].y1,
+        //         label: `Deaths: ${(working_deaths_data_for_plot[lastIndex].y1).toFixed(2)}(Millions)`,
+        //         y1axis: true
+        //     },
+        //     {
+        //         "x1": working_deaths_data_for_plot[0].x,
+        //         "y1": working_deaths_data_for_plot[0].y2,
+        //         "x2": working_deaths_data_for_plot[0].x + 15,
+        //         "y2": working_deaths_data_for_plot[0].y2 - 15,
+        //         label: `Cases: ${(working_deaths_data_for_plot[0].y2).toFixed(2)}(Mil.)`,
+        //         y1axis: false
+        //     },
+        //     {
+        //         "x1": working_deaths_data_for_plot[lastIndex].x,
+        //         "y1": working_deaths_data_for_plot[lastIndex].y2,
+        //         "x2": working_deaths_data_for_plot[lastIndex].x - 15,
+        //         "y2": working_deaths_data_for_plot[lastIndex].y2 + 15,
+        //         label: `Cases: ${(working_deaths_data_for_plot[lastIndex].y2).toFixed(2)}(Mil.)`,
+        //         y1axis: false
+        //     }
+        // ]
+        // drawDualAxisAnnotation(chartObj, annotation_data, "#plot2");
+
+        chartObj = drawDualAxisLineChart({
+            xAxis: "Time",
+            y1Axis: "Fatality Rate",
+            y2Axis: "Cases (in million)"
+        }, working_fatality_data, "#plot1", 800, 650);
+        chartObj.render();
+    }
+    draw_or_refresh();
+
+</script>
+
+</html>

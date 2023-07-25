@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+
+    <link rel="stylesheet" href="slides.css">
+
+    <!-- bootstrap js -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <title>[CS-416] Narrative Visualization</title>
+</head>
+
+<body>
+    <div id="slides_container" class="slideswrapper">
+        <div class="slide" id="slide-2">
+            <div class="slide__left_pane">
+                <svg class="plot" width=1000 height=700></svg>
+            </div>
+            <div class="slide__partition"></div>
+            <div class="slide__right_pane">
+                <div class="slide__text">
+                    <div class="slide__h2">
+                        Number of Cases as a function of time
+                    </div>
+                    <br>
+                    <p>Line chart shows evolution of covid cases as the time progressed. The horizontal axis is time and
+                        vertical axis
+                        is number of covid cases.
+                        We can clearly see a meteoric rise(eg. ~10 Mil. to ~80 Mil.) in cases with only a minor plateau here and there suggesting the
+                        virality of covid.
+                    </p>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+        <div class="slide_order_container">
+            <ol>
+                
+                <li><a href="slide1.html"> 1 </a></li>
+                <li class="active_slide_number">2</li>
+                <li><a href="slide3.html"> 3 </a></li>
+                <li><a href="slide4.html"> 4 </a></li>
+                <li><a href="slide5.html"> 5 </a></li>
+                <li><a href="slide6.html"> 6 </a></li>
+                <li ><a href="slide7.html"> 7 </a></li>
+            </ol>
+        </div>
+    </div>
+</body>
+
+<script src="js/cases_data.js"></script>
+<script src="js/line_chart.js"></script>
+<script src="js/annotate.js"></script>
+<script>
+    const dateParse = d3.timeParse("%Y-%m-%d");
+    plot_data = cases_data.map(obj => {return {
+        y: obj.cases/(1_000_000),
+        x: dateParse(obj.date)
+    }})
+    const chartObj = drawLineChart({
+        xAxis: "Time",
+        yAxis: "Cases (in millions)"
+    }, plot_data);
+    chartObj.render();
+    annotation_data = [
+        {
+            "x1": plot_data[283].x,
+            "y1": plot_data[283].y,
+            "x2": dateParse("2021-04-01"),
+            "y2": 10,
+            label: "Gradual Increase in Covid Cases"
+        },
+        {
+            "x1": plot_data[824].x,
+            "y1": plot_data[824].y,
+            "x2": dateParse("2022-02-01"),
+            "y2": 60,
+            label: "Meteoric rise in Covid Cases"
+        }
+    ]
+    drawAnnotation(chartObj, annotation_data)
+</script>
+
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+
+    <link rel="stylesheet" href="slides.css">
+
+    <!-- bootstrap js -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <title>[CS-416] Narrative Visualization</title>
+</head>
+
+<body>
+    <div id="slides_container" class="slideswrapper">
+        <div class="slide" id="slide-3">
+            <div class="slide__left_pane">
+                <svg class="plot" width=1000 height=700></svg>
+            </div>
+            <div class="slide__partition"></div>
+            <div class="slide__right_pane">
+                <div class="slide__text">
+                    <div class="slide__h2">
+                        Number of Deaths as a function of time
+                    </div>
+                    <br>
+                    <p>Line chart shows evolution of deaths due to covid as the time progressed. The horizontal axis is time and
+                        vertical axis
+                        is number of deaths due to covid.
+                        <br/><br/>
+                        We can see that there is rise in death(eg. ~0.15 Mil. to ~0.85 Mil) as the time progressed but after a certain point
+                        (maybe vaccine discovery) there is not much increase in deaths as seen in the number of cases.
+                        <br/><br/>
+                        This observation is bit difficult to grasp, it becomes even difficult when we plot both cases and deaths 
+                        due to covid together. But as we progress we will see that there are other plots that help us conclude.
+                    </p>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+        <div class="slide_order_container">
+            <ol>
+                
+                <li><a href="slide1.html"> 1 </a></li>
+                <li><a href="slide2.html"> 2 </a></li>
+                <li class="active_slide_number"> 3 </li>
+                <li><a href="slide4.html"> 4 </a></li>
+                <li><a href="slide5.html"> 5 </a></li>
+                <li><a href="slide6.html"> 6 </a></li>
+                <li ><a href="slide7.html"> 7 </a></li>
+            </ol>
+        </div>
+    </div>
+</body>
+
+<script src="js/deaths_data.js"></script>
+<script src="js/line_chart.js"></script>
+<script src="js/annotate.js"></script>
+<script>
+    const dateParse = d3.timeParse("%Y-%m-%d");
+    const plot_data = deaths_data.map(obj => {return {
+        y: obj.deaths/(1_000_000),
+        x: dateParse(obj.date)
+    }});
+    chartObj = drawLineChart({
+        xAxis: "Time",
+        yAxis: "Deaths(in millions)"
+    }, plot_data);
+    chartObj.render();
+    annotation_data = [
+        {
+            "x1": plot_data[181].x,
+            "y1": plot_data[181].y,
+            "x2": dateParse("2020-10-01"),
+            "y2": 0.1,
+            label: "Gradual Increase in Deaths Due to Covid"
+        },
+        {
+            "x1": plot_data[696].x,
+            "y1": plot_data[696].y,
+            "x2": dateParse("2022-04-01"),
+            "y2": 0.8,
+            label: "Not that steep of a slope"
+        }
+    ]
+    drawAnnotation(chartObj, annotation_data)
+</script>
+
+
+</html>

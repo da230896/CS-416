@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+
+    <link rel="stylesheet" href="slides.css">
+
+    <!-- bootstrap js -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <title>[CS-416] Narrative Visualization</title>
+</head>
+
+<body>
+    <div id="slides_container" class="slideswrapper">
+        <div class="slide" id="slide-4">
+            <div class="slide__left_pane">
+                <svg class="plot" width=1000 height=700></svg>
+            </div>
+            <div class="slide__partition"></div>
+            <div class="slide__right_pane">
+                <div class="slide__text">
+                    <div class="slide__h2">
+                        Fatality Rate as a function of time
+                    </div>
+                    <br>
+                    <p>Line chart shows evolution of fatality rate(eg. Down from 6.05% to 1.5%) of covid as the time progressed. The horizontal axis
+                        is time and
+                        vertical axis
+                        is fatality rate(i.e. = deaths/cases).
+                        <br /><br />
+                        We can clearly see that there is rise in fatality rate as the time progressed but after a
+                        certain point
+                        (maybe vaccine discovery) there is decrease in fatality rate.
+                        <br/><br/>
+                        Initially there is a peak which might be attributed to lower reporting of cases.
+                    </p>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+        <div class="slide_order_container">
+            <ol>
+
+                <li><a href="slide1.html"> 1 </a></li>
+                <li><a href="slide2.html"> 2 </a></li>
+                <li><a href="slide3.html"> 3 </a></li>
+                <li class="active_slide_number"> 4 </li>
+                <li><a href="slide5.html"> 5 </a></li>
+                <li><a href="slide6.html"> 6 </a></li>
+                <li ><a href="slide7.html"> 7 </a></li>
+            </ol>
+        </div>
+    </div>
+</body>
+
+<script src="js/deaths_data.js"></script>
+<script src="js/cases_data.js"></script>
+<script src="js/line_chart.js"></script>
+<script src="js/annotate.js"></script>
+
+<script>
+    const dateParse = d3.timeParse("%Y-%m-%d");
+    fatality_data = deaths_data.map((obj, index) => {
+        const cases = cases_data[index].cases;
+        let fatality_rate = 0;
+        if (cases != 0) {
+            fatality_rate = obj.deaths / cases;
+        }
+        return {
+            y: 100 * fatality_rate,
+            x: dateParse(obj.date)
+        }
+    });
+    chartObj = drawLineChart({
+        xAxis: "Time",
+        yAxis: "Fatality Rate"
+    }, fatality_data);
+    chartObj.render();
+    annotation_data = [
+        {
+            "x1": fatality_data[116].x,
+            "y1": fatality_data[116].y,
+            "x2": dateParse("2021-04-01"),
+            "y2": 5,
+            label: "2nd Peak of fatality Rate after which Drastic fall"
+        },
+        {
+            "x1": fatality_data[351].x,
+            "y1": fatality_data[351].y,
+            "x2": dateParse("2021-04-01"),
+            "y2": 4,
+            label: "Fall due to Vaccine and other reasons"
+        },
+        {
+            "x1": fatality_data[972].x,
+            "y1": fatality_data[972].y,
+            "x2": dateParse("2022-01-01"),
+            "y2": 2,
+            label: "Plateau in Fatality rate"
+        }
+    ]
+    drawAnnotation(chartObj, annotation_data)
+</script>
+
+
+</html>
