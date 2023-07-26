@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <link rel="stylesheet" href="slides.css">
     <link rel="stylesheet" href="slider.css">
@@ -21,12 +21,12 @@
             <div class="slide__top_pane">
                 <div class="slide__text">
                     <div class="slide__h2">
-                        Free form user exploration
+                        Free form user exploration (Hover for tooltips)
                         <br />
                     </div>
                     <div class="slide__h3">
                         User can interact with timeline filter to see curves at different interval of time and learn
-                        their own lesson.
+                        their own lesson. 
                     </div>
                     <br><br>
                 </div>
@@ -61,6 +61,7 @@
 <script src="js/deaths_data.js"></script>
 <script src="js/cases_data.js"></script>
 <script src="js/line_chart_dual_axis.js"></script>
+<script src="js/tooltip.js"></script>
 <!-- <script src="js/annotate.js"></script> -->
 <script>
     const dateParse = d3.timeParse("%Y-%m-%d");
@@ -68,7 +69,9 @@
         return {
             y1: obj.deaths / (1_000_000),
             y2: cases_data[index].cases / (1_000_000),
-            x: dateParse(obj.date)
+            x: dateParse(obj.date),
+            y1Suffix: "(Mil.)",
+            y2Suffix: "(Mil.)"
         }
     });
     var working_deaths_data_for_plot = [];
@@ -82,7 +85,9 @@
         return {
             y1: 100 * fatality_rate,
             y2: cases / (1_000_000),
-            x: dateParse(obj.date)
+            x: dateParse(obj.date),
+            y1Suffix: "%",
+            y2Suffix: "(Mil.)"
         }
     });
     var working_fatality_data = [];
@@ -95,6 +100,7 @@
             y2Axis: "Cases (in million)"
         }, working_deaths_data_for_plot, "#plot2", 800, 650);
         chartObj.render();
+        addDualAxisToolTip("#plot2", working_deaths_data_for_plot, chartObj);
         lastIndex = working_deaths_data_for_plot.length - 1;
 
         // annotation_data = [
@@ -139,8 +145,11 @@
             y2Axis: "Cases (in million)"
         }, working_fatality_data, "#plot1", 800, 650);
         chartObj.render();
+        addDualAxisToolTip("#plot1", working_fatality_data, chartObj);
     }
     draw_or_refresh();
+
+    
 
 </script>
 
