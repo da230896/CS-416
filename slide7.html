@@ -26,7 +26,7 @@
                     </div>
                     <div class="slide__h3">
                         User can interact with timeline filter to see curves at different interval of time and learn
-                        their own lesson. 
+                        their own lesson.
                     </div>
                     <br><br>
                 </div>
@@ -45,7 +45,7 @@
         </div>
         <div class="slide_order_container">
             <ol>
-                <li><a href="slide2.html"> 1 </a></li>
+                <li><a href="slide1.html"> 1 </a></li>
                 <li><a href="slide2.html"> 2 </a></li>
                 <li><a href="slide3.html"> 3 </a></li>
                 <li><a href="slide4.html"> 4 </a></li>
@@ -53,6 +53,9 @@
                 <li><a href="slide6.html"> 6 </a></li>
                 <li class="active_slide_number"><a href="slide7.html"> 7 </a></li>
             </ol>
+            <div>
+                (Use arrow keys or click the slide number to navigate to)
+            </div>
         </div>
     </div>
 </body>
@@ -149,8 +152,11 @@
     }
     draw_or_refresh();
 
-    
+
 
 </script>
-
+<script src="js/slide_change.js"></script>
+<script>
+    embedSlideChange("slide6.html", undefined)
+</script>
 </html>
